@@ -1,0 +1,26 @@
+import ezdxf
+
+def extract_features_from_dxf(file_path):
+    doc = ezdxf.readfile(file_path)
+    msp = doc.modelspace()
+    
+    features = []
+    for entity in msp:
+        if entity.dxftype() == 'LINE':
+            start_point = entity.dxf.start
+            end_point = entity.dxf.end
+            features.append({
+                'type': 'LINE',
+                'start': start_point,
+                'end': end_point
+            })
+        elif entity.dxftype() == 'CIRCLE':
+            center = entity.dxf.center
+            radius = entity.dxf.radius
+            features.append({
+                'type': 'CIRCLE',
+                'center': center,
+                'radius': radius
+            })
+        # Add more entity types as needed
+    return features
